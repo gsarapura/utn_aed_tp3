@@ -16,10 +16,9 @@
 6) Kilómetros recorridos desde la cabina anterior (un entero que puede ser un cero
 para indicar que la cabina actual es la primera que ese vehículo atraviesa).
 """
-# import random
+
 class Ticket:
     def __init__(self, id: int, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int, distancia_km: int):
-        # self.id = random.randint(0, 10000000)
         self.id = id
         self.patente = patente
         self.tipo_vehiculo = tipo_vehiculo
