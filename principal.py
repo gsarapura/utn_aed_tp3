@@ -18,19 +18,16 @@ def principal():
 
         print('4. Buscar por patente y cabina (se muestra el primero encontrado).')
 
-        print(
-            '5. Buscar si existe en el arreglo un registro cuyo código de ticket sea igual a c, siendo c una valor que se carga por teclado. Si existe, cambiar el valor del campo forma de pago, de forma que pase a valer el valor contrario (si valía 1, que pase a valer 2, y viceversa), y luego mostrar el registro completo modificado. Si no existe indicar con un mensaje. La búsqueda debe detenerse al encontrar el primer registro que coincida con el criterio pedido.')
+        print('5. Buscar registro por ticket. Se actualiza la forma de pago y se muestra el registro por pantalla')
 
-        print(
-            '6. Determinar la cantidad de vehículos de cada país que pasaron por las cabinas, contando también los vehículos que no son de ninguno de los siete paises básicos.')
+        print('6. Mostrar cantidad de vehículos de cada país (incluso \'otro\') que pasaron por las cabinas')
 
-        print(
-            '7. Determinar el importe acumulado por pagos de tickets, por cada uno de los posibles tipos de vehiculo (un acumulador por cada uno de los tres tipos).')
-        print(
-            '8. En base al resultado obtenido en el punto 7, determinar y mostrar cuál fue cuál fue el tipo de vehículo con mayor monto acumulado, e indicar además qué porcentaje representa ese monto mayor sobre el monto total.')
+        print('7. Mostrar el importe acumulado por pagos de tickets, por cada uno de los posibles tipos de vehiculo')
 
-        print(
-            '9. Calcular y mostrar la distancia promedio desde la última cabina recorrida entre todos los vehículos del arreglo, e informar además cuántos de los vehículos recorrieron una distancia mayor a ese promedio.')
+        print('8. Según punto 7, mostrar el tipo de vehículo con mayor monto y el porcentaje sobre el monto total.')
+
+        print('9. Mostrar la distancia promedio desde la última cabina recorrida entre todos los vehículos del arreglo,'
+              '\ny cuántos de los vehículos recorrieron una distancia mayor a ese promedio.')
 
         print('10. Salir\n')
 
@@ -50,6 +47,7 @@ def principal():
         elif opc == 4:
             buscar_patente_cabina(v_tickets)
         elif opc == 5:
+            # Mostrar mensaje de no encontrado
             pass
         elif opc == 6:
             pass
