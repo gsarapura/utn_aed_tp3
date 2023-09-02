@@ -160,5 +160,19 @@ def acumulado_por_cabina(v):
         acumulador[pos] += vehiculo.importe
         cant[pos] += 1
 
+def distancia(tickets):
+    suma = 0
+    for ticket in tickets:
+        suma += ticket.distancia_km
+    promedio = suma / len(tickets)
+
+    contador = 0
+    for ticket in tickets:
+        if float(ticket.distancia_km) >= promedio:
+            contador += 1
+            
+    print("Promedio de distancias recorridas: ", promedio)
+    print("Cantidad de vehiculos que supera el promedio: ", contador)
+
 
 # Encontrar patente cargada por usuario
