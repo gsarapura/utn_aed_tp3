@@ -34,11 +34,19 @@ def principal():
         print("-" * 100)
         opc = int(input('Ingrese su eleccion: '))
         if opc == 1:
-            # Falta agregar advertencia si ya hay registros cargados
-            # porque "el arreglo debe ser creado de nuevo desde cero"
-            v_tickets = crear_arreglo(v_tickets)
+            if not v_tickets:
+                v_tickets = crear_arreglo(v_tickets)
+            else:
+                operacion = input("\n* Advertencia: se borrarán los registros hechos * \n1 Continuar - 0 Volver: ")
+                while not operacion in "01":
+                    operacion = input("1 Continuar - 0 Volver: ")
+                    
+                if operacion == "1":
+                    v_tickets = crear_arreglo(v_tickets)
+                else:
+                    continue
+
         elif opc == 2:
-            # Falta validación de cada campo
             # ordenarlos?
             v_tickets = cargar_ticket(v_tickets)
         elif opc == 3:

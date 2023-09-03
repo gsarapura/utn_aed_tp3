@@ -19,11 +19,12 @@ from platform import system
 para indicar que la cabina actual es la primera que ese vehículo atraviesa).
 """
 
+from random import randint
 
 class Ticket:
-    def __init__(self, registro_id: int, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int,
-                 distancia_km: int):
-        self.registro_id = registro_id
+    def __init__(self, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int,
+                 distancia_km: int, registro_id: int = 0):
+        self.registro_id = registro_id if not registro_id == 0 else randint(100000000, 999999999)
         self.patente = patente
         self.tipo_vehiculo = tipo_vehiculo
         self.forma_pago = forma_pago
@@ -45,8 +46,7 @@ def dividir_linea(linea):
     """
 
     registro_id = linea[0:10]
-    # Eliminar espacios solo para las que tienen espacios
-    patente = linea[10:17].strip()
+    patente = linea[11:17] if linea[10] == " " else linea[10:17]
     tipo_vehiculo = linea[17]
     forma_pago = linea[18]
     pais_cabina = linea[19]
@@ -87,7 +87,7 @@ def crear_arreglo(v_tickets):
 
         registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km = dividir_linea(linea)
 
-        ticket = Ticket(registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
+        ticket = Ticket(patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km, registro_id)
         v_tickets.append(ticket)
 
     archivo.close()
@@ -98,21 +98,49 @@ def crear_arreglo(v_tickets):
 
 
 # Punto 2
+def crear_rango(comienzo, final):
+    rango = []
+    for i in range(comienzo, final + 1):
+        rango.append(str(i))
+    
+    return rango
+
+
+def es_numero(n):
+    return n in "0123456789"
+
+
+def validar_entero_rango(comienzo, final, mensaje):
+    opcion = input(f"\n{mensaje}")
+    rango = crear_rango(comienzo, final)
+    while not es_numero(opcion) or not opcion in rango:
+        opcion = input(f"Por favor, ingrese un entero entre {comienzo} y {final}: ")
+
+    return int(opcion)
+
+
+def validar_entero(mensaje):
+    opcion = input(f"\n{mensaje}")
+    
+    while not es_numero(opcion):
+        opcion = input("Por favor, ingrese un entero: ")
+
+    return int(opcion)
+
+
 def cargar_ticket(v_tickets):
     print("\nCargar ticket:")
 
-    id = int(input("Ingrese el id (entero): "))
-    patente = input("Ingrese la patente (string): ")
-    tipo_vehiculo = int(
-        input("Ingrese el tipo de vehículo (un entero entre 0 y 2 - (0: motocicleta, 1: automóvil, 2: camión)): "))
-    forma_pago = int(
-        input("Ingrese la forma de pago (un dígito 1 o 2 que indica la forma de pago (1: manual, 2 telepeaje)): "))
-    pais_cabina = int(input(
-        "Ingrese el país de la cabina (0: Argentina - 1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay)): "))
-    distancia_km = int(input(
-        "Ingrese los kilómetros recorridos desde la cabina anterior (0 si es la primera): "))
+    # No haría faltar verificar porque si no se reconoce, es "otro", ¿cierto?
+    patente = input("\nIngrese la patente: ")
 
-    ticket = Ticket(id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
+    tipo_vehiculo = validar_entero_rango(0, 2, "Ingrese tipo de vehiculo (0: motocicleta, 1: automóvil, 2: camión): ")
+    forma_pago = validar_entero_rango(1, 2, "Ingrese forma de pago (1: manual, 2 telepeaje): ")
+    pais_cabina = validar_entero_rango(0, 4, "Ingrese país de la cabina (0: : Argentina - 1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay): ")
+
+    distancia_km = validar_entero("Ingrese los kilómetros recorridos desde la cabina anterior (0 si es la primera): ")
+
+    ticket = Ticket(patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
     v_tickets.append(ticket)
 
     print("\n", " " * 30, "*" * 3, "Registro cargado con éxito.", "*" * 3)
