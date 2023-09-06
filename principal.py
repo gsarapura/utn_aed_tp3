@@ -3,7 +3,7 @@ from ticket import *
 
 def principal():
     v_tickets = []
-
+    v_numeros_test = [12, 2, 3, 43, 234, 324324, 99]
     opc = 0
     while opc != 10:
         print(" ")
@@ -37,21 +37,26 @@ def principal():
             if not v_tickets:
                 v_tickets = crear_arreglo(v_tickets)
             else:
-                operacion = input("\n* Advertencia: se borrarán los registros hechos * \n1 Continuar - 0 Volver: ")
-                while not operacion in "01":
-                    operacion = input("1 Continuar - 0 Volver: ")
-                    
-                if operacion == "1":
+                op = input("\n* Advertencia: se borrarán los registros hechos * \n1 Continuar - 0 Volver: ")
+
+                while op not in "01":
+                    op = input("1 Continuar - 0 Volver: ")
+
+                if op == "1":
                     v_tickets = crear_arreglo(v_tickets)
                 else:
                     continue
 
         elif opc == 2:
-            # ordenarlos?
-            v_tickets = cargar_ticket(v_tickets)
+            # ¿Ordenarlos?
+            # v_tickets = cargar_ticket(v_tickets)
+            cargar_ticket(v_tickets)
         elif opc == 3:
             # Falta ordenar de menor a mayor (id) por binary search
             mostrar_registros(v_tickets)
+            # ordenar_ascendente_dir(v_numeros_test)
+            # for r in v_numeros_test:
+            #     print(r)
         elif opc == 4:
             buscar_patente_cabina(v_tickets)
         elif opc == 5:
