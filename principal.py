@@ -3,38 +3,39 @@ from ticket import *
 
 def principal():
     v_tickets = []
-    opc = 0
+    v_acumulador_importe = []
+    opc = "0"
 
-    while opc != 10:
+    while opc != "10":
         print(" ")
-        print('-' * 100)
-        print(f'{" " * 40}Menu de opciones:')
         print("-" * 100)
-        print('\n1. Crear el arreglo de registro desde peajes-tp3.txt')
+        print(f'{" " * 40}Menú de opciones:')
+        print("-" * 100)
+        print("\n1. Crear el arreglo de registro desde peajes-tp3.txt")
 
-        print('2. Cargar por teclado los datos de un ticket')
+        print("2. Cargar por teclado los datos de un ticket")
 
-        print('3. Mostrar los registros del arreglo (id de menor a mayor).')
+        print("3. Mostrar los registros del arreglo (id de menor a mayor).")
 
-        print('4. Buscar por patente y cabina (se muestra el primero encontrado).')
+        print("4. Buscar por patente y cabina (se muestra el primero encontrado).")
 
-        print('5. Buscar registro por ticket. Se actualiza la forma de pago y se muestra el registro por pantalla')
+        print("5. Buscar por ID (código). Se cambia la forma de pago y se muestra el registro por pantalla")
 
-        print('6. Mostrar cantidad de vehículos de cada país (incluso \'otro\') que pasaron por las cabinas')
+        print("6. Mostrar cantidad de vehículos de cada país (incluso \'otro\') que pasaron por las cabinas")
 
-        print('7. Mostrar el importe acumulado por pagos de tickets, por cada uno de los posibles tipos de vehiculo')
+        print("7. Mostrar el importe acumulado por pagos de tickets, por cada uno de los posibles tipos de vehiculo")
 
-        print('8. Según punto 7, mostrar el tipo de vehículo con mayor monto y el porcentaje sobre el monto total.')
+        print("8. Según punto 7, mostrar el tipo de vehículo con mayor monto y el porcentaje sobre el monto total.")
 
-        print('9. Mostrar la distancia promedio desde la última cabina recorrida entre todos los vehículos del arreglo,'
-              '\ny cuántos de los vehículos recorrieron una distancia mayor a ese promedio.')
+        print("9. Mostrar la distancia promedio desde la última cabina recorrida y cantidad de vehículos que "
+              "\nrecorrieron una distancia mayor al promedio.")
 
-        print('10. Salir\n')
+        print("10. Salir\n")
 
         print("-" * 100)
-        opc = int(input('Ingrese su elección: '))
+        opc = input("Ingrese su elección: ")
 
-        if opc == 1:
+        if opc == '1':
             if not v_tickets:
                 v_tickets = crear_arreglo()
             else:
@@ -47,26 +48,24 @@ def principal():
                     v_tickets = crear_arreglo()
                 else:
                     continue
-
-        elif opc == 2:
-            # ¿Ordenarlos?
+        elif opc == "2":
             cargar_ticket(v_tickets)
-        elif opc == 3:
-            # Falta ordenar de menor a mayor (id) por binary search
+        elif opc == "3":
             mostrar_registros(v_tickets)
-        elif opc == 4:
+        elif opc == "4":
             buscar_patente_cabina(v_tickets)
-        elif opc == 5:
-            # Mostrar mensaje de no encontrado
-            pass
-        elif opc == 6:
-            pass
-        elif opc == 7:
-            pass
-        elif opc == 8:
-            pass
-        elif opc == 9:
+        elif opc == "5":
+            buscar_registro_id(v_tickets)
+        elif opc == "6":
+            mostrar_cantidad_patentes(v_tickets)
+        elif opc == "7":
+            v_acumulador_importe = mostrar_acumulado_por_vehiculo(v_tickets)
+        elif opc == "8":
+            mostrar_mayor_porcentaje(v_acumulador_importe)
+        elif opc == "9":
             distancia(v_tickets)
+        else:
+            print("\n", " " * 29, "-" * 3, "Ingrese una opción correcta.", "-" * 3)
 
 
 if __name__ == "__main__":
