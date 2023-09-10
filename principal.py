@@ -3,8 +3,8 @@ from ticket import *
 
 def principal():
     v_tickets = []
-    v_numeros_test = [12, 2, 3, 43, 234, 324324, 99]
     opc = 0
+
     while opc != 10:
         print(" ")
         print('-' * 100)
@@ -32,31 +32,28 @@ def principal():
         print('10. Salir\n')
 
         print("-" * 100)
-        opc = int(input('Ingrese su eleccion: '))
+        opc = int(input('Ingrese su elección: '))
+
         if opc == 1:
             if not v_tickets:
-                v_tickets = crear_arreglo(v_tickets)
+                v_tickets = crear_arreglo()
             else:
                 op = input("\n* Advertencia: se borrarán los registros hechos * \n1 Continuar - 0 Volver: ")
 
-                while op not in "01":
+                while op not in "0 1":
                     op = input("1 Continuar - 0 Volver: ")
 
                 if op == "1":
-                    v_tickets = crear_arreglo(v_tickets)
+                    v_tickets = crear_arreglo()
                 else:
                     continue
 
         elif opc == 2:
             # ¿Ordenarlos?
-            # v_tickets = cargar_ticket(v_tickets)
             cargar_ticket(v_tickets)
         elif opc == 3:
             # Falta ordenar de menor a mayor (id) por binary search
             mostrar_registros(v_tickets)
-            # ordenar_ascendente_dir(v_numeros_test)
-            # for r in v_numeros_test:
-            #     print(r)
         elif opc == 4:
             buscar_patente_cabina(v_tickets)
         elif opc == 5:
@@ -70,10 +67,6 @@ def principal():
             pass
         elif opc == 9:
             distancia(v_tickets)
-
-    if not v_tickets == []:
-        for t in v_tickets:
-            print(t)
 
 
 if __name__ == "__main__":

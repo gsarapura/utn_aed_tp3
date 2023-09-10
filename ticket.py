@@ -1,11 +1,10 @@
 from platform import system
-from random import randint
 
 
 class Ticket:
-    def __init__(self, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int,
-                 distancia_km: int, registro_id: int = 0):
-        self.registro_id = registro_id if not registro_id == 0 else randint(100000000, 999999999)
+    def __init__(self, registro_id: int, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int,
+                 distancia_km: int):
+        self.registro_id = registro_id
         self.patente = patente
         self.tipo_vehiculo = tipo_vehiculo
         self.forma_pago = forma_pago
@@ -51,7 +50,7 @@ def encontrar_idioma(primera_linea):
         return "Idioma no encontrado"
 
 
-def crear_arreglo(v_tickets):
+def crear_arreglo():
     # Chequeo para sistemas Linux - Codificaciones de Windows no válidos para algunos distros de Linux
     ruta_archivo = "peajes-tp3.txt"
     cod = "windows-1252" if system() == "Linux" else None
@@ -68,7 +67,7 @@ def crear_arreglo(v_tickets):
 
         registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km = dividir_linea(linea)
 
-        ticket = Ticket(patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km, registro_id)
+        ticket = Ticket(registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
         v_tickets.append(ticket)
 
     archivo.close()
@@ -87,23 +86,20 @@ def crear_rango(comienzo, final):
     return rango
 
 
-def es_numero(n):
-    return n in "0123456789"
-
-
-def validar_entero_rango(comienzo, final, mensaje):
+def validar_rango(comienzo, final, mensaje):
     op = input(f"\n{mensaje}")
     rango = crear_rango(comienzo, final)
-    while not es_numero(op) or not op in rango:
+
+    while op not in rango:
         op = input(f"Por favor, ingrese un entero entre {comienzo} y {final}: ")
 
     return int(op)
 
 
-def validar_entero(mensaje):
+def cargar_entero_valido(mensaje):
     op = input(f"\n{mensaje}")
 
-    while not es_numero(op):
+    while not op.isnumeric():
         op = input("Por favor, ingrese un entero: ")
 
     return int(op)
@@ -112,17 +108,22 @@ def validar_entero(mensaje):
 def cargar_ticket(v_tickets):
     print("\nCargar ticket:")
 
-    # No haría faltar verificar porque si no se reconoce, es "otro", ¿cierto?
+    # Ingresar ID, no importa qué cantidad tenga
+    registro_id = cargar_entero_valido("\nIngrese el ID:")
+
+    # No haría faltar verificar porque si no se reconoce, es "otro".
     patente = input("\nIngrese la patente: ")
 
-    tipo_vehiculo = validar_entero_rango(0, 2, "Ingrese tipo de vehiculo (0: motocicleta, 1: automóvil, 2: camión): ")
-    forma_pago = validar_entero_rango(1, 2, "Ingrese forma de pago (1: manual, 2 telepeaje): ")
-    pais_cabina = validar_entero_rango(0, 4, "Ingrese país de la cabina (0: : Argentina - "
-                                             "1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay): ")
+    tipo_vehiculo = validar_rango(0, 2, "Ingrese tipo de vehiculo (0: motocicleta, 1: automóvil, 2: camión): ")
+    forma_pago = validar_rango(1, 2, "Ingrese forma de pago (1: manual, 2 telepeaje): ")
+    pais_cabina = validar_rango(0, 4, "Ingrese país de la cabina (0: : Argentina - "
+                                      "1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay): ")
 
-    distancia_km = validar_entero("Ingrese los kilómetros recorridos desde la cabina anterior (0 si es la primera): ")
+    # Valor mayor a tres dígitos
+    distancia_km = cargar_entero_valido("Ingrese los kilómetros recorridos desde la cabina anterior "
+                                        "(0 si es la primera): ")
 
-    ticket = Ticket(patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
+    ticket = Ticket(registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km)
     v_tickets.append(ticket)
 
     print("\n", " " * 30, "*" * 3, "Registro cargado con éxito.", "*" * 3)
@@ -160,9 +161,8 @@ def buscar_patente_cabina(v_tickets):
     print("\nBúsqueda:")
 
     patente = input("Ingrese la patente (string): ")
-    pais_cabina = int(input(
-        "Ingrese el país de la cabina (0: Argentina - 1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay)): "))
-
+    pais_cabina = validar_rango(0, 4, "Ingrese país de la cabina (0: : Argentina - "
+                                      "1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay): ")
     # Búsqueda secuencial
     for t in v_tickets:
         if t.patente == patente and t.pais_cabina == pais_cabina:
@@ -170,7 +170,7 @@ def buscar_patente_cabina(v_tickets):
             print(t)
             return
 
-    # Búsqueda binaria
+    # Búsqueda binaria: requiere tener lista ordenada
     izq, der = 0, len(v_tickets) - 1
 
     print("\n", " " * 30, "-" * 3, "Sin resultado disponible.", "-" * 3)
@@ -201,3 +201,13 @@ def distancia(tickets):
 
 
 # Encontrar patente cargada por usuario
+
+
+def buscar_patente(v, p):
+    apariciones = []
+    for vehiculo in v:
+        if vehiculo.patente == p:
+            apariciones.append(vehiculo)
+
+    return apariciones
+
