@@ -3,8 +3,9 @@ from ticket import *
 
 def principal():
     v_tickets = []
-
+    v_acumulador_importe = []
     opc = 0
+    
     while opc != 10:
         print(" ")
         print('-' * 100)
@@ -52,9 +53,9 @@ def principal():
         elif opc == 6:
             pass
         elif opc == 7:
-            pass
+            v_acumulador_importe = mostrar_acumulado_por_vehiculo(v_tickets)
         elif opc == 8:
-            pass
+            mostrar_pto_8(v_acumulador_importe)
         elif opc == 9:
             pass
 

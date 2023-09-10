@@ -162,3 +162,89 @@ def acumulado_por_cabina(v):
 
 
 # Encontrar patente cargada por usuario
+
+#Punto 7
+def calcular_importe_final(t_veh, f_pago, p_cabina):
+  """
+  Esta funcion calcula el importe final a pagar en el peaje
+  
+  :param <str> t_veh: digito de tipo de vehiculo
+  :param <str> f_pago: digito de tipo de pago
+  :param <str> p_cabina: digito de pais de cabina
+  
+  return: <int> total a pagar
+  """
+  importe_basico = 300
+  
+  #Brasil
+  if p_cabina == 2: 
+    importe_basico = 400
+  #Bolivia
+  elif p_cabina == 1:
+    importe_basico = 200
+
+  #motocicleta
+  if t_veh == 0:
+    importe_basico *= 0.5
+  #camion
+  elif t_veh == 2:
+    importe_basico *= 1.6
+  
+  #pago telepeaje
+  if f_pago == 1:
+    importe_basico *= 0.9
+    
+  return importe_basico
+
+def calcular_vector_acumulador(v):
+  v_acumulador = [0] * 3
+  for ticket in v:
+    v_acumulador[ticket.tipo_vehiculo] += calcular_importe_final(ticket.tipo_vehiculo, ticket.forma_pago, ticket.pais_cabina)
+  return v_acumulador
+
+def vehiculo_mayor_acumuladο(v):
+  v_acumulador = v
+  monto_mayor, monto_total, porcentaje = 0, 0, 0
+  vehiculo_mayor = 4
+  i = 0
+  #Recorre el vector acumulador y determina qué tipo de vehiculo tiene le monto mayor
+  for tipo in v_acumulador:
+    monto_total += tipo
+    if tipo > monto_mayor:
+      monto_mayor = tipo
+      vehiculo_mayor = i
+    i+=1
+  if monto_mayor != 0:
+    porcentaje = monto_mayor * 100  / monto_total
+  
+  return [vehiculo_mayor, porcentaje]
+  
+def mostrar_acumulado_por_vehiculo (v):
+  if not v:
+    print(f"\nPor favor, registre previamente algun ticket.")
+  else:
+    v_acumulador = calcular_vector_acumulador(v)
+    print(f"\n*** Monto acumulado por cada tipo de vehiculo ***\n\n"
+          f"Motocicletas: ${v_acumulador[0]}\n"
+          f"Automoviles: ${v_acumulador[1]}\n"
+          f"Camiones: ${v_acumulador[2]}\n")
+    return v_acumulador
+
+#Punto 8
+def mostrar_pto_8(v_acumulador):
+  tipo = ""
+  porcentaje = 0
+  if not v_acumulador:
+    print(f"\nCalcular por favor el punto 7 previamente.")
+  else:
+    pto_8 = vehiculo_mayor_acumuladο(v_acumulador)
+    porcentaje = pto_8[1]
+    if pto_8[0] == 0:
+      tipo = "Motocicletas"
+    elif pto_8[0] == 1:
+      tipo = "Automoviles"
+    elif pto_8[0] == 2:
+      tipo = "Camiones"
+    print(f"\n*** Mostrando información ***\n\n"
+          f"El tipo de vehiculo con mayor monto acumulado es ** {tipo} **\n\n"
+          f"Representa un porcentaje sobre el total facturado de {porcentaje}%\n")
