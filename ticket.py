@@ -163,43 +163,48 @@ def acumulado_por_cabina(v):
 
 # Encontrar patente cargada por usuario
 
-#Punto 7
-def calcular_importe_final(t_veh, f_pago, p_cabina):
-  """
-  Esta funcion calcula el importe final a pagar en el peaje
-  
-  :param <str> t_veh: digito de tipo de vehiculo
-  :param <str> f_pago: digito de tipo de pago
-  :param <str> p_cabina: digito de pais de cabina
-  
-  return: <int> total a pagar
-  """
-  importe_basico = 300
-  
-  #Brasil
-  if p_cabina == 2: 
-    importe_basico = 400
-  #Bolivia
-  elif p_cabina == 1:
-    importe_basico = 200
 
-  #motocicleta
-  if t_veh == 0:
-    importe_basico *= 0.5
-  #camion
-  elif t_veh == 2:
-    importe_basico *= 1.6
-  
-  #pago telepeaje
-  if f_pago == 1:
-    importe_basico *= 0.9
-    
-  return importe_basico
+
+#Punto 7
+def calcular_importe(cabina_pais, tipo_vehiculo, forma_pago): 
+    """
+    Calcula el importe final a pagar en el peaje
+    :param cabina: <str> (0: Argentina - 1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay)
+    :param tipo_vehiculo: <str> (0: motocicleta, 1: automóvil, 2:camión)
+    :param forma_pago: <str> (1: manual, 2 telepeaje)
+    :return: <float> importe a pagar
+    """
+    peaje_general = 300
+    peaje_bolivia = 200
+    peaje_brasil = 400
+
+    importe_final = 0
+
+    if cabina_pais == 1:
+        importe_final += peaje_bolivia
+    elif cabina_pais == 2:
+        importe_final += peaje_brasil
+    else:
+        importe_final += peaje_general
+
+    if tipo_vehiculo == 0:
+        # Moto: descuento de 50%
+        importe_final *= 0.5
+    elif tipo_vehiculo == 2:
+        # Camión: recarga de 60%
+        importe_final *= 1.6
+    # Auto: sin recargos
+
+    # Descuento del 10% por telepeaje
+    if forma_pago == 2:
+        importe_final *= 0.9
+
+    return int(importe_final)
 
 def calcular_vector_acumulador(v):
   v_acumulador = [0] * 3
   for ticket in v:
-    v_acumulador[ticket.tipo_vehiculo] += calcular_importe_final(ticket.tipo_vehiculo, ticket.forma_pago, ticket.pais_cabina)
+    v_acumulador[ticket.tipo_vehiculo] += calcular_importe(ticket.pais_cabina, ticket.tipo_vehiculo, ticket.forma_pago)
   return v_acumulador
 
 def vehiculo_mayor_acumuladο(v):
