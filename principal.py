@@ -56,7 +56,7 @@ def principal():
         elif opc == 8:
             pass
         elif opc == 9:
-            pass
+            distancia(v_tickets)
 
     if not v_tickets == []:
         for t in v_tickets:
