@@ -64,8 +64,8 @@ def principal():
         elif opc == "8":
             mostrar_mayor_porcentaje(v_acumulador_importe)
         elif opc == "9":
-            distancia(v_tickets)
-        else:
+            mostrar_distancia(v_tickets)
+        elif opc != "10":
             print("\n", " " * 29, "-" * 3, "Ingrese una opción correcta.", "-" * 3)
 
 
