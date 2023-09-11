@@ -2,8 +2,7 @@ from platform import system
 
 
 class Ticket:
-    def __init__(self, registro_id: int, patente: str, tipo_vehiculo: int, forma_pago: int, pais_cabina: int,
-                 distancia_km: float):
+    def __init__(self, registro_id, patente, tipo_vehiculo, forma_pago, pais_cabina, distancia_km):
         self.registro_id = registro_id
         self.patente = patente
         self.tipo_vehiculo = tipo_vehiculo
@@ -12,10 +11,77 @@ class Ticket:
         self.distancia_km = distancia_km
         self.importe_basico = 300
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"ID: {self.registro_id}\nPatente: {self.patente}\nTipo de vehiculo: {self.tipo_vehiculo}" \
                f"\nForma de pago: {self.forma_pago}\nPais de la cabina: {self.pais_cabina}\nDistancia en km: " \
                f"{self.distancia_km}"
+
+    def obtener_pos_procedencia(self):
+        if len(self.patente) == 7:
+            # Argentina
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "0" <= self.patente[2] <= "9":
+                        if "0" <= self.patente[3] <= "9":
+                            if "0" <= self.patente[4] <= "9":
+                                if "A" <= self.patente[5] <= "Z":
+                                    if "A" <= self.patente[6] <= "Z":
+                                        return 0
+
+            # Bolivia
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "0" <= self.patente[2] <= "9":
+                        if "0" <= self.patente[3] <= "9":
+                            if "0" <= self.patente[4] <= "9":
+                                if "0" <= self.patente[5] <= "9":
+                                    if "0" <= self.patente[6] <= "9":
+                                        return 1
+
+            # Brasil
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "A" <= self.patente[2] <= "Z":
+                        if "0" <= self.patente[3] <= "9":
+                            if "A" <= self.patente[4] <= "Z":
+                                if "0" <= self.patente[5] <= "9":
+                                    if "0" <= self.patente[6] <= "9":
+                                        return 2
+
+            # Paraguay
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "A" <= self.patente[2] <= "Z":
+                        if "A" <= self.patente[3] <= "Z":
+                            if "0" <= self.patente[4] <= "9":
+                                if "0" <= self.patente[5] <= "9":
+                                    if "0" <= self.patente[6] <= "9":
+                                        return 3
+
+            # Uruguay
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "A" <= self.patente[2] <= "Z":
+                        if "0" <= self.patente[3] <= "9":
+                            if "0" <= self.patente[4] <= "9":
+                                if "0" <= self.patente[5] <= "9":
+                                    if "0" <= self.patente[6] <= "9":
+                                        return 4
+        # Chile
+        elif len(self.patente) == 6:
+            if "A" <= self.patente[0] <= "Z":
+                if "A" <= self.patente[1] <= "Z":
+                    if "A" <= self.patente[2] <= "Z":
+                        if "A" <= self.patente[3] <= "Z":
+                            if "0" <= self.patente[4] <= "9":
+                                if "0" <= self.patente[5] <= "9":
+                                    return 5
+        # Otro
+        return 6
+
+
+paises = "Argentina", "Bolivia", "Brasil", "Paraguay", "Uruguay", "Chile", "Otro"
+tipo_v = "Motocicleta", "Automóvil", "Camión"
 
 
 def revisar_sin_registros(v_tickets):
@@ -178,8 +244,9 @@ def cargar_ticket(v_tickets, v_registro_id_manual):
     # Ingresar ID, no importa qué cantidad tenga
     registro_id = revisar_id(v_registro_id_manual)
 
-    # No haría faltar verificar porque si no se reconoce, es "otro".
     patente = input("\nIngrese la patente: ")
+    while len(patente) == 0:
+        patente = input("Ingrese un valor: ")
 
     tipo_vehiculo = validar_rango(0, 2, "Ingrese tipo de vehiculo (0: motocicleta, 1: automóvil, 2: camión): ")
     forma_pago = validar_rango(1, 2, "Ingrese forma de pago (1: manual, 2: telepeaje): ")
@@ -212,6 +279,8 @@ def mostrar_registros(v_tickets):
     ordenar_ascendente_dir(v_tickets)
     for t in v_tickets:
         print(f"\n{t}")
+        pos_pais = t.obtener_pos_procedencia()
+        print(f"País de procedencia: {paises[pos_pais]}")
 
 
 # Punto 4
@@ -230,6 +299,8 @@ def buscar_patente_cabina(v_tickets):
         if t.patente == patente and t.pais_cabina == pais_cabina:
             print("\n", " " * 35, "*" * 3, "Patente encontrada", "*" * 3)
             print(t)
+            pos_pais = t.obtener_pos_procedencia()
+            print(f"País de procedencia: {paises[pos_pais]}")
             return
 
     print("\n", " " * 30, "-" * 3, "Sin resultado disponible.", "-" * 3)
@@ -249,95 +320,31 @@ def buscar_registro_id(v_tickets):
 
             if c.forma_pago == 2:
                 c.forma_pago = 1
-                return print(f"\n{c}")
+                print(f"\n{c}")
+                pos_pais = c.obtener_pos_procedencia()
+                print(f"País de procedencia: {paises[pos_pais]}")
+                return
 
             if c.forma_pago == 1:
                 c.forma_pago = 2
-                return print(f"\n{c}")
+                print(f"\n{c}")
+                pos_pais = c.obtener_pos_procedencia()
+                print(f"País de procedencia: {paises[pos_pais]}")
+                return
 
     print("\n", " " * 29, "-" * 3, "Ningún registro con ese ID.", "-" * 3)
 
 
 # Punto 6
-def obtener_procedencia(patente):
-    """
-    Esta función determina la procedencia del vehículo a base de su patente.
-    :param patente: <str> patente del vehículo
-    :return: <str> país de procedencia "Argentina", "Bolivia", "Brasil", "Chile", "Paraguay", "Uruguay" u "Otro"
-    si no se reconoce.
-    """
-    if len(patente) == 7:
-        # Argentina
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "0" <= patente[2] <= "9":
-                    if "0" <= patente[3] <= "9":
-                        if "0" <= patente[4] <= "9":
-                            if "A" <= patente[5] <= "Z":
-                                if "A" <= patente[6] <= "Z":
-                                    return 0
-
-        # Bolivia
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "0" <= patente[2] <= "9":
-                    if "0" <= patente[3] <= "9":
-                        if "0" <= patente[4] <= "9":
-                            if "0" <= patente[5] <= "9":
-                                if "0" <= patente[6] <= "9":
-                                    return 1
-
-        # Brasil
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "A" <= patente[2] <= "Z":
-                    if "0" <= patente[3] <= "9":
-                        if "A" <= patente[4] <= "Z":
-                            if "0" <= patente[5] <= "9":
-                                if "0" <= patente[6] <= "9":
-                                    return 2
-
-        # Paraguay
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "A" <= patente[2] <= "Z":
-                    if "A" <= patente[3] <= "Z":
-                        if "0" <= patente[4] <= "9":
-                            if "0" <= patente[5] <= "9":
-                                if "0" <= patente[6] <= "9":
-                                    return 3
-
-        # Uruguay
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "A" <= patente[2] <= "Z":
-                    if "0" <= patente[3] <= "9":
-                        if "0" <= patente[4] <= "9":
-                            if "0" <= patente[5] <= "9":
-                                if "0" <= patente[6] <= "9":
-                                    return 4
-    # Chile
-    elif len(patente) == 6:
-        if "A" <= patente[0] <= "Z":
-            if "A" <= patente[1] <= "Z":
-                if "A" <= patente[2] <= "Z":
-                    if "A" <= patente[3] <= "Z":
-                        if "0" <= patente[4] <= "9":
-                            if "0" <= patente[5] <= "9":
-                                return 5
-    # Otro
-    return 6
-
-
 def mostrar_cantidad_patentes(v):
     if revisar_sin_registros(v):
         return
 
     m_conteo = [0] * 7
-    paises = "Argentina", "Bolivia", "Brasil", "Paraguay", "Uruguay", "Chile", "Otro"
 
     for ticket in v:
-        m_conteo[obtener_procedencia(ticket.patente)] += 1
+        pos = ticket.obtener_pos_procedencia()
+        m_conteo[pos] += 1
 
     n = len(m_conteo)
     print("\n", " " * 35, "*" * 3, "Conteo de patentes", "*" * 3)
@@ -346,7 +353,7 @@ def mostrar_cantidad_patentes(v):
 
 
 # Punto 7
-def calcular_importe(cabina_pais, tipo_vehiculo, forma_pago): 
+def calcular_importe(cabina_pais, tipo_vehiculo, forma_pago):
     """
     Calcula el importe final a pagar en el peaje
     :param cabina_pais: <str> (0: Argentina - 1: Bolivia - 2: Brasil - 3: Paraguay - 4: Uruguay)
@@ -397,7 +404,6 @@ def mostrar_acumulado_por_vehiculo(v):
         return
 
     v_acumulador = calcular_vector_acumulador(v)
-    tipo_v = "Motocicletas", "Automóviles", "Camiones"
     n = len(v_acumulador)
 
     print(f"\n*** Monto acumulado por cada tipo de vehiculo ***\n")
@@ -431,7 +437,6 @@ def mostrar_mayor_porcentaje(v_acumulador):
         print(f"\nCalcular el punto 7 previamente, por favor.")
     else:
         pos_mayor, porcentaje = vehiculo_mayor_acumulado(v_acumulador)
-        tipo_v = "Motocicletas", "Automóviles", "Camiones"
         print(f"\n*** Mostrando información ***\n")
 
         print(f"El tipo de vehiculo con mayor monto acumulado: ** {tipo_v[pos_mayor]} **\n\n"
@@ -440,7 +445,7 @@ def mostrar_mayor_porcentaje(v_acumulador):
 
 
 # Punto 9
-def distancia(tickets):
+def mostrar_distancia(tickets):
     if revisar_sin_registros(tickets):
         return
 
@@ -455,5 +460,5 @@ def distancia(tickets):
         if ticket.distancia_km >= promedio:
             contador += 1
 
-    print("Promedio de distancias recorridas: ", round(promedio, 2))
-    print("Cantidad de vehículos que supera el promedio: ", contador)
+    print(f"Promedio de distancias recorridas: {round(promedio, 2)}")
+    print(f"Cantidad de vehículos que supera el promedio: {contador}")
