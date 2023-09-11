@@ -163,11 +163,20 @@ def cargar_valor_valido(mensaje, tipo):
         return round(float(op), 2)
 
 
-def cargar_ticket(v_tickets):
+def revisar_id(v_registro_id_manual):
+    registro_id = cargar_valor_valido("Ingrese el ID: ", "entero")
+    while registro_id in v_registro_id_manual:
+        registro_id = cargar_valor_valido("ID ya ingresado, ingrese otro: ", "entero")
+    v_registro_id_manual.append(registro_id)
+
+    return registro_id
+
+
+def cargar_ticket(v_tickets, v_registro_id_manual):
     print("\nCargar ticket:")
 
     # Ingresar ID, no importa qué cantidad tenga
-    registro_id = cargar_valor_valido("Ingrese el ID: ", "entero")
+    registro_id = revisar_id(v_registro_id_manual)
 
     # No haría faltar verificar porque si no se reconoce, es "otro".
     patente = input("\nIngrese la patente: ")
@@ -246,9 +255,7 @@ def buscar_registro_id(v_tickets):
                 c.forma_pago = 2
                 return print(f"\n{c}")
 
-        else:
-            print("\n", " " * 29, "-" * 3, "Ningún registro con ese ID.", "-" * 3)
-            break
+    print("\n", " " * 29, "-" * 3, "Ningún registro con ese ID.", "-" * 3)
 
 
 # Punto 6
