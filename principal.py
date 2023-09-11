@@ -4,6 +4,7 @@ from ticket import *
 def principal():
     v_tickets = []
     v_acumulador_importe = []
+    v_registro_id_manual = []
     opc = "0"
 
     while opc != "10":
@@ -49,7 +50,7 @@ def principal():
                 else:
                     continue
         elif opc == "2":
-            cargar_ticket(v_tickets)
+            cargar_ticket(v_tickets, v_registro_id_manual)
         elif opc == "3":
             mostrar_registros(v_tickets)
         elif opc == "4":
